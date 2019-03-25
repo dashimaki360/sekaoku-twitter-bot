@@ -40,14 +40,14 @@ class SekaokuTwitter(object):
             self.api.retweet(tweet.id)
             logger.info("retweeted " + tweet.id)
         except:
-            logger.info("already retweeted " + tweet.id)
+            logger.error("already retweeted " + tweet.id)
 
     def favorite(self, tweet):
         try:
             self.api.create_favorite(tweet.id)
             logger.info("favorited " + tweet.id)
         except:
-            logger.info("already favorited " + tweet.id)
+            logger.error("already favorited " + tweet.id)
 
     def save_image(self, tweet):
         logger.debug("func: save_image")
