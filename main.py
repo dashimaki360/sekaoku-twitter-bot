@@ -3,8 +3,7 @@ from logging import getLogger, StreamHandler, Formatter, DEBUG, INFO
 
 import tweepy
 
-# root rogger setting
-logger = getLogger()
+logger = getLogger("sekaoku_bot")
 formatter = Formatter('%(asctime)s %(name)s %(funcName)s [%(levelname)s]: %(message)s')
 handler = StreamHandler()
 handler.setFormatter(formatter)
@@ -29,26 +28,35 @@ class SekaokuTwitter(object):
 
     def is_retweeted(self, tweet):
         logger.debug("func: is retweeted")
-        #TODO
-        return True
+        return tweet.retweeted
 
     def is_included_img(self, tweet):
         logger.debug("func: is included img")
-        #TODO
-        return True
+        return "media" in tweet.entities
 
     def retweet(self, tweet):
         logger.debug("func: retweet")
-        #TODO
-        pass
+        try:
+            self.api.retweet(tweet.id)
+            logger.info("retweeted " + tweet.id)
+        except:
+            logger.info("already retweeted " + tweet.id)
+
+    def favorite(self, tweet):
+        try:
+            self.api.create_favorite(tweet.id)
+            logger.info("favorited " + tweet.id)
+        except:
+            logger.info("already favorited " + tweet.id)
 
     def save_image(self, tweet):
         logger.debug("func: save_image")
         #TODO
+        logger.info("STILL NOT DEVELOPMENT")
         return True
 
-    def main(self):
-        num_tweets = 10
+    def run(self):
+        num_tweets = 25  # magic number. if tweet a lot please increment
         tweets = self.api.search(q='"#せかいのおくだ"',
                                  lang='ja',
                                  result_type='recent',
@@ -62,7 +70,11 @@ class SekaokuTwitter(object):
             self.retweet(tweet)
 
 
-if __name__ == '__main__':
+def main():
     sekaoku_tw = SekaokuTwitter()
-    sekaoku_tw.main()
+    sekaoku_tw.run()
+
+
+if __name__ == '__main__':
+    main()
 
